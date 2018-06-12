@@ -35,7 +35,6 @@ const logoutListener = function() {
     FaceAPI.logout();
     view.drawLogoutState();
     view.drawNotif("You are now logged out.", "info");
-    console.log("ba7777");
   }
 
   helpers.$on(logoutBtn, "click", logoutUser);
@@ -44,10 +43,8 @@ const logoutListener = function() {
 const loginUser = function() {
   function parseResponse(resp) {
     if (resp.authResponse) {
-      console.log("logged in yastaaaaaa");
       view.drawNotif("You are successfully logged in.", "info");
     } else {
-      console.log("fokkak mel tawahan");
       view.drawNotif("User denied login. Please log in to view your profile.", "error");
     }
   }
@@ -55,18 +52,18 @@ const loginUser = function() {
 };
 
 const login = function() {
+  view.drawSpinner();
   function parseLoginResponse(resp) {
     if (resp.status === "connected") {
-      console.log("asly ya almany");
       logoutListener();
       view.removeSignInBtn();
       view.drawNotif("You are logged in.", "info");
       getUserInfo();
     } else {
-      console.log("yen3al kossomak");
       const btn = view.drawSignInBtn();
       helpers.$on(btn, "click", loginUser);
     }
+    view.removeSpinner();
   }
   FaceAPI.checkLoginStatus(parseLoginResponse);
 };

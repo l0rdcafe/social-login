@@ -1,5 +1,20 @@
 import helpers from "./helpers";
 
+const drawSpinner = function() {
+  const spinner = helpers.newEl("i");
+  const section = helpers.qs(".section");
+  spinner.className = "fas fa-spinner fa-spin x-centered fa-lg";
+  section.appendChild(spinner);
+};
+
+const removeSpinner = function() {
+  const spinner = helpers.qs(".fa-spinner");
+
+  if (spinner) {
+    spinner.parentNode.removeChild(spinner);
+  }
+};
+
 const drawSignInBtn = function() {
   const btn = helpers.newEl("button");
   const section = helpers.qs(".section");
@@ -14,6 +29,7 @@ const drawLogoutBtn = function() {
   if (helpers.qs("#logout")) {
     return helpers.qs("#logout");
   }
+
   const btn = helpers.newEl("button");
   const section = helpers.qs(".section");
   btn.className = "button info";
@@ -32,10 +48,13 @@ const drawLogoutState = function() {
   removeLogoutBtn();
   const title = helpers.qs(".title");
   const posts = helpers.qs(".posts");
-  const footer = helpers.qs(".footer");
-  posts.parentNode.removeChild(posts);
-  title.parentNode.removeChild(title);
-  footer.style.position = "absolute";
+
+  if (posts) {
+    const footer = helpers.qs(".footer");
+    posts.parentNode.removeChild(posts);
+    title.parentNode.removeChild(title);
+    footer.style.position = "absolute";
+  }
 };
 
 const removeSignInBtn = function() {
@@ -78,10 +97,16 @@ const drawPosts = function(posts) {
   postsList.className = "posts";
   posts.forEach(post => {
     const postLi = helpers.newEl("li");
-    const { message } = post;
+    let msg = "";
+
+    if (post.message) {
+      msg = post.message;
+    } else {
+      msg = "No description available";
+    }
     const time = post.created_time.substring(0, 10);
     postLi.className = "posts__post";
-    postLi.innerHTML = `<p class="posts__post__title warning text-white">${message}</p><small class="posts__post__date secondary text-white">${time}</small>`;
+    postLi.innerHTML = `<p class="posts__post__title warning text-white">${msg}</p><small class="posts__post__date secondary text-white">${time}</small>`;
     postsList.appendChild(postLi);
   });
   footer.parentNode.insertBefore(postsList, footer);
@@ -100,4 +125,14 @@ const drawInfo = function(user) {
   section.appendChild(title);
 };
 
-export default { drawLogoutBtn, drawLogoutState, drawSignInBtn, removeSignInBtn, drawNotif, drawInfo, drawPosts };
+export default {
+  drawLogoutBtn,
+  drawLogoutState,
+  drawSignInBtn,
+  removeSignInBtn,
+  drawNotif,
+  drawInfo,
+  drawPosts,
+  drawSpinner,
+  removeSpinner
+};
